@@ -23,15 +23,19 @@ class PenjualanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'faktur'=>'required|integer',
-            'NoPelanggan'=>'required',
-            'TanggalPenjualan'=>'required|date'
+            'faktur' => 'required|integer',
+            'NoPelanggan' => 'required',
+            'TanggalPenjualan' => 'required|date'
         ]);
 
-        Penjualan::create($request->all());
+        Penjualan::create([
+            'faktur' => $request->faktur,
+            'NoPelanggan' => $request->NoPelanggan,
+            'TanggalPenjualan' => $request->TanggalPenjualan
+        ]);
 
         return redirect()->route('penjualan.index')
-            ->with('success','Data berhasil ditambah');
+            ->with('success', 'Data berhasil ditambah');
     }
 
     public function edit($id)
@@ -39,22 +43,21 @@ class PenjualanController extends Controller
         $penjualan = Penjualan::findOrFail($id);
         $pelanggans = Pelanggan::all();
 
-        return view('penjualan.edit',
-            compact('penjualan','pelanggans'));
+        return view('penjualan.edit', compact('penjualan','pelanggans'));
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $penjualan = Penjualan::findOrFail($id);
 
         $penjualan->update([
-            'faktur'=>$request->faktur,
-            'NoPelanggan'=>$request->NoPelanggan,
-            'TanggalPenjualan'=>$request->TanggalPenjualan,
+            'faktur' => $request->faktur,
+            'NoPelanggan' => $request->NoPelanggan,
+            'TanggalPenjualan' => $request->TanggalPenjualan,
         ]);
 
         return redirect()->route('penjualan.index')
-            ->with('success','Data berhasil diupdate');
+            ->with('success', 'Data berhasil diupdate');
     }
 
     public function destroy($id)
@@ -63,6 +66,6 @@ class PenjualanController extends Controller
         $data->delete();
 
         return redirect()->route('penjualan.index')
-            ->with('success','Data berhasil dihapus');
+            ->with('success', 'Data berhasil dihapus');
     }
 }
